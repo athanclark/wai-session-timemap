@@ -1,0 +1,28 @@
+Name:                   wai-session-timemap
+Version:                0.0.0
+Author:                 Athan Clark <athan.clark@gmail.com>
+Maintainer:             Athan Clark <athan.clark@gmail.com>
+License:                BSD3
+License-File:           LICENSE
+Synopsis:               Simple session middleware implementation
+-- Description:
+Cabal-Version:          >= 1.10
+Build-Type:             Simple
+
+Library
+  Default-Language:     Haskell2010
+  HS-Source-Dirs:       src
+  GHC-Options:          -Wall
+  Exposed-Modules:      Network.Wai.Session.TimeMap
+  Build-Depends:        base >= 4.8 && < 5
+                      , bytestring
+                      , hashable
+                      , stm
+                      , timemap
+                      , vault
+                      , uuid
+                      , wai-session-alt
+
+Source-Repository head
+  Type:                 git
+  Location:             https://github.com/athanclark/wai-session-timemap
