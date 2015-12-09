@@ -42,7 +42,7 @@ uuidSessionCfg rKey pKey keyN valN vKey cache =
       case mOldNonce of
         Just oldNonce
           | oldNonce == nonce -> do
-              new <- nextRandom
-              TM.adjust (const new) sid cache
-              return (Just nonce)
+              newNonce <- nextRandom
+              TM.adjust (const newNonce) sid cache
+              return (Just newNonce)
         _ -> return Nothing
