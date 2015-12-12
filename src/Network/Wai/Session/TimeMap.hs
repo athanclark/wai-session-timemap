@@ -13,6 +13,7 @@ import qualified Data.TimeMap           as TM
 import qualified Data.Vault.Lazy        as V
 import qualified Data.ByteString        as BS
 
+import Control.Concurrent.STM
 
 
 uuidSessionCfg :: ( Hashable k
@@ -38,7 +39,7 @@ uuidSessionCfg rKey pKey keyN valN vKey cache =
     }
   where
     updateSession sid nonce = do
-      mOldNonce <- TM.lookup sid cache
+      mOldNonce <- atomically (TM.lookup sid cache)
       case mOldNonce of
         Just oldNonce
           | oldNonce == nonce -> do
