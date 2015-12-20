@@ -19,7 +19,6 @@ Library
                       , hashable
                       , stm
                       , timemap >= 0.0.2
-                      , vault
                       , uuid
                       , wai-session-alt
 
