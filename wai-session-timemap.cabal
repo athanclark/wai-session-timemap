@@ -19,6 +19,7 @@ Library
                       , hashable
                       , stm
                       , timemap >= 0.0.2
+                      , transformers
                       , uuid
                       , wai-session-alt
 

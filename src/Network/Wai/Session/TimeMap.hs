@@ -12,17 +12,19 @@ import Data.Hashable
 import qualified Data.TimeMap           as TM
 import qualified Data.ByteString        as BS
 
+import Control.Monad.IO.Class
 import Control.Concurrent.STM
 
 
 uuidSessionCfg :: ( Hashable k
                   , Eq k
+                  , MonadIO m
                   ) => (k -> BS.ByteString)       -- ^ render key
                     -> (BS.ByteString -> Maybe k) -- ^ parse key
                     -> BS.ByteString              -- ^ cookie name for key
                     -> BS.ByteString              -- ^ cookie name for UUID
                     -> TM.TimeMap k UUID          -- ^ session cache reference
-                    -> SessionConfig IO k UUID
+                    -> SessionConfig m k UUID
 uuidSessionCfg rKey pKey keyN valN cache =
   SessionConfig
     { renderKey = rKey
@@ -36,11 +38,11 @@ uuidSessionCfg rKey pKey keyN valN cache =
     }
   where
     updateSession sid nonce = do
-      mOldNonce <- atomically (TM.lookup sid cache)
+      mOldNonce <- liftIO $ atomically (TM.lookup sid cache)
       case mOldNonce of
         Just oldNonce
           | oldNonce == nonce -> do
-              newNonce <- nextRandom
-              TM.adjust (const newNonce) sid cache
+              newNonce <- liftIO nextRandom
+              liftIO $ TM.adjust (const newNonce) sid cache
               return (Just newNonce)
         _ -> return Nothing
